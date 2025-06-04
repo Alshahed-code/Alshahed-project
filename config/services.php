@@ -32,7 +32,15 @@ return [
     ],
 
     'shippo' => [
-        'api_key' => env('SHIPPO_API_KEY'),
+        'token' => env('SHIPPO_LIVE_TOKEN'),
+        'key' => env('SHIPPO_API_KEY'),
+        'sendle' => env('SENDLE_CARRIER_ACCOUNT'),
+        'canadapost' => env('CANADAPOST_CARRIER_ACCOUNT'),
+    ],
+
+    'stallion' => [
+        'key' => env('STALLION_API_KEY'),
+        'base' => env('STALLION_API_BASE'),
     ],
 
 ];
