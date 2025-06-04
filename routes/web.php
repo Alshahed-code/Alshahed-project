@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\CheckoutController;
+use App\Services\SmartShippingService;
 
 Route::get('/', [HomeController::class, 'home']);
 
@@ -74,3 +75,44 @@ Route::controller(StripePaymentController::class)->group(function(){
 Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
 Route::post('/checkout/rates', [CheckoutController::class, 'getRates'])->name('checkout.getRates');
 Route::post('/checkout/confirm', [CheckoutController::class, 'confirmShipment'])->name('checkout.confirm');
+
+Route::get('/test-shipping', function (SmartShippingService $shippingService) {
+    $orderValue = 165.00;
+    $currency = 'CAD';
+
+    $shipment = [
+        "to_address" => [
+            "name" => "Jane Smith",
+            "address1" => "701 W Georgia St",
+            "city" => "Vancouver",
+            "province_code" => "BC",
+            "postal_code" => "V7Y 1G5",
+            "country_code" => "CA",
+            "is_residential" => true
+        ],
+        "weight" => 2.0,
+        "weight_unit" => "kg",
+        "length" => 30,
+        "width" => 25,
+        "height" => 10,
+        "size_unit" => "cm",
+        "package_type" => "Parcel",
+        "package_contents" => "Merchandise",
+        "items" => [
+            [
+                "description" => "Winter jacket",
+                "quantity" => 1,
+                "value" => $orderValue,
+                "currency" => $currency,
+                "country_of_origin" => "CA"
+            ]
+        ]
+    ];
+
+    // ✅ Force correct fulfillment region
+    $shipment['region'] = 'ON';
+
+    $rate = $shippingService->getSmartRate($shipment, $orderValue, $currency);
+
+    return response()->json($rate);
+});
