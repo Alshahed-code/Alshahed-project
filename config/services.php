@@ -31,8 +31,9 @@ return [
         ],
     ],
 
-    'shippo' => [
-        'api_key' => env('SHIPPO_API_KEY'),
+    'stallion' => [
+        'key' => env('STALLION_API_KEY'),
+        'base' => env('STALLION_API_BASE'),
     ],
 
 ];
