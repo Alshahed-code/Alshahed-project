@@ -71,6 +71,9 @@ Route::controller(StripePaymentController::class)->group(function(){
 });
 
 
-Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-Route::post('/checkout/rates', [CheckoutController::class, 'getRates'])->name('checkout.getRates');
-Route::post('/checkout/confirm', [CheckoutController::class, 'confirmShipment'])->name('checkout.confirm');
+// Shipping Routes
+Route::get('/shipping/calculator', [ShippingController::class, 'showCalculator'])->name('shipping.calculator');
+Route::match(['get', 'post'], '/shipping/calculate', [ShippingController::class, 'calculate'])->name('shipping.calculate');
+Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+
+
